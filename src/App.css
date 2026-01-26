@@ -1,0 +1,91 @@
+/* Base Styles - Clean & Modern */
+#root {
+  width: 100%;
+  margin: 0 auto;
+  /* Removed padding: 2rem; - It's better to handle padding inside components */
+  font-family: 'Inter', -apple-system, sans-serif;
+  background-color: #f8fafc; /* Softer slate gray */
+  min-height: 100vh;
+  color: #1e293b; /* Dark slate instead of pure black */
+}
+
+/* Container Styling */
+.main-container {
+  background: white;
+  padding: 3rem;
+  border-radius: 24px; /* More rounded = more modern */
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
+  border: 1px solid #f1f5f9;
+}
+
+/* Header Styling */
+.header h1 {
+  color: #0f172a;
+  font-size: 2.5rem;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  margin-bottom: 0.75rem;
+}
+
+/* Button Styling - Fix for your White Text issue */
+.start-btn, .btn-logout {
+  background-color: #2563eb; /* A more professional "Digital Blue" */
+  color: #ffffff !important; /* Forces the text to be white */
+  border: none;
+  padding: 12px 28px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.start-btn:hover {
+  background-color: #1d4ed8;
+  transform: translateY(-1px);
+  box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.2);
+}
+
+/* Info Box Section */
+.info-box {
+  margin: 2rem 0;
+  padding: 2rem;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  text-align: left;
+}
+
+.info-box h2 {
+  color: #1e293b;
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* List Styling */
+ul {
+  list-style: none; /* Remove the emojis */
+  padding: 0;
+}
+
+ul li {
+  margin: 12px 0;
+  font-size: 0.95rem;
+  color: #475569;
+  display: flex;
+  align-items: center;
+}
+
+/* Adding a custom checkmark via CSS */
+ul li::before {
+  content: '✓';
+  margin-right: 12px;
+  color: #10b981; /* Success Green */
+  font-weight: bold;
+}
