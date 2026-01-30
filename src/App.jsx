@@ -1,87 +1,50 @@
-import React, { useState } from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import React from "react";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { useAuth } from "./context/AuthProvider";
 import "./App.css";
 
-// Components
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Login from "./components/Login";
 import Landing from "./components/Landing";
-
-// Pages
 import Home from "./pages/Home";
 import Books from "./pages/Books";
 import Categories from "./pages/Categories";
 import About from "./pages/About";
+import Dashboard from "./pages/admin/Dashboard";
+import ManageBooks from "./pages/admin/ManageBooks";
+import Orders from "./pages/admin/Orders";
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { user } = useAuth();
+  const location = useLocation();
+  const isAdminRoute = location.pathname.startsWith("/admin");
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 font-sans antialiased text-slate-900">
+      {/* Show User Navbar only if logged in AND NOT on admin route */}
+      {user && !isAdminRoute && <Navbar />}
 
-      {/* Navbar visible only after login */}
-      {isLoggedIn && (
-        <Navbar
-          isLoggedIn={isLoggedIn}
-          setIsLoggedIn={setIsLoggedIn}
-        />
-      )}
-
-      <main className="flex-grow">
+      <main className="flex-grow flex flex-col">
         <Routes>
+          <Route path="/login" element={user ? <Navigate to={user.role === 'admin' ? "/admin/dashboard" : "/"} /> : <Login />} />
+          
+          <Route path="/" element={user ? <Landing /> : <Navigate to="/login" />} />
+          <Route path="/home" element={user ? <Home /> : <Navigate to="/login" />} />
+          <Route path="/books" element={user ? <Books /> : <Navigate to="/login" />} />
+          <Route path="/categories" element={user ? <Categories /> : <Navigate to="/login" />} />
+          <Route path="/about" element={user ? <About /> : <Navigate to="/login" />} />
 
-          {/* Login Route */}
-          <Route
-            path="/login"
-            element={
-              isLoggedIn ? (
-                <Navigate to="/" />
-              ) : (
-                <Login setIsLoggedIn={setIsLoggedIn} />
-              )
-            }
-          />
+          {/* Admin Routes */}
+          <Route path="/admin/dashboard" element={user?.role === "admin" ? <Dashboard /> : <Navigate to="/login" />} />
+          <Route path="/admin/manage-books" element={user?.role === "admin" ? <ManageBooks /> : <Navigate to="/login" />} />
+          <Route path="/admin/orders" element={user?.role === "admin" ? <Orders /> : <Navigate to="/login" />} />
 
-          {/* Home route (Landing page component) */}
-          <Route
-            path="/"
-            element={isLoggedIn ? <Landing /> : <Navigate to="/login" />}
-          />
-
-          {/* Pages */}
-          <Route
-            path="/home"
-            element={isLoggedIn ? <Home /> : <Navigate to="/login" />}
-          />
-
-          <Route
-            path="/books"
-            element={isLoggedIn ? <Books /> : <Navigate to="/login" />}
-          />
-
-          <Route
-            path="/categories"
-            element={isLoggedIn ? <Categories /> : <Navigate to="/login" />}
-          />
-
-          <Route
-            path="/about"
-            element={isLoggedIn ? <About /> : <Navigate to="/login" />}
-          />
-
-          {/* Fallback */}
-          <Route
-            path="*"
-            element={<Navigate to={isLoggedIn ? "/" : "/login"} />}
-          />
-
+          <Route path="*" element={<Navigate to={user ? (user.role === 'admin' ? "/admin/dashboard" : "/") : "/login"} />} />
         </Routes>
       </main>
 
-      {/* Footer visible only after login */}
-      {isLoggedIn && <Footer />}
-
+      {user && !isAdminRoute && <Footer />}
     </div>
   );
 }
